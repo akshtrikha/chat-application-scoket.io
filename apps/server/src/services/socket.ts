@@ -7,7 +7,12 @@ class SocketService {
     // Initialising the socket.io server
     constructor() {
         console.log("Initialising Socket Service...");
-        this._io = new Server();
+        this._io = new Server({
+            cors: {
+                allowedHeaders: ['*'],
+                origin: '*'
+            }
+        });
     }
 
     // initialising the public listeners for socket.io connections.
@@ -21,6 +26,10 @@ class SocketService {
             console.log(
                 `New Socket Connected.\nSocket: ${socket} \nSocket_ID: ${socket.id}`,
             );
+
+            socket.on('disconnect', (reason) => {
+                console.log(`Old Socket Disconnected. \nSocket: ${socket} \n Socket_ID: ${socket.id}. \n Reason: ${reason}`);
+            })
 
             // when there is a new message...
             // the argument is simply desctructured and its type is mentioned.
